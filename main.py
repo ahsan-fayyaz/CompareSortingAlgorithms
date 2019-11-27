@@ -1,6 +1,7 @@
 import math
 from random import randint
 import timeit
+import copy
 
 
 def welcome():
@@ -219,13 +220,13 @@ def want_to_print():
 def print_unsorted_and_sorted_arrays(unsorted, sorted):
     print("Unsorted Random Array: ", end="")
     print("[",end=" ")
-    for item in array:
+    for item in unsorted:
         print(str(item), end= " ")
     print("]\n")
 
     print("Sorted Array: ", end="")
     print("[",end=" ")
-    for item in sorted_array:
+    for item in sorted:
         print(str(item),end=" ")
     print("]\n")
 
@@ -233,7 +234,7 @@ def print_unsorted_and_sorted_arrays(unsorted, sorted):
 
 #----------------------------------------main run function--------------------------------#
 def main_run():
-    welcome()
+    welcome()    
     choose_algorithm()
     algorithm_chosen = user_input()
     n =  choose_input_size()
@@ -242,13 +243,14 @@ def main_run():
         print_choice = want_to_print()
     print_which_algorithm_user_chose(algorithm_chosen, n)
     array = generate_random_array_of_size(n)
+    temp_ptr_to_array = copy.deepcopy(array)
     print("Sorting...\n\n")
     sorted_array, time = sort(array, algorithm_chosen)
     time_in_millisecond = convert_s_to_ms(time)
     time_in_n_sf = round_to_n_significant(time_in_millisecond)
 
     if(print_choice):
-        print_unsorted_and_sorted_arrays(array, sorted_array)
+        print_unsorted_and_sorted_arrays(temp_ptr_to_array, sorted_array)
 
     print("Total time taken: ", time_in_n_sf, " milliseconds")
 
