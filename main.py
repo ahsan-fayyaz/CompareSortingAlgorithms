@@ -3,13 +3,12 @@ from random import randint
 import timeit
 
 
-
 def welcome():
-    str =  "------------------------------------\n"
-    str += "|      ALGORITHM RUN-TIME TOOL     |\n"
-    str += "------------------------------------\n"
+    str =  "    ------------------------------------\n"
+    str += "    |      ALGORITHM RUN-TIME TOOL     |\n"
+    str += "    ------------------------------------\n"
     str += "\n\n"
-    str += "Welcome to the Algorithm run-time checking application\n"
+    str += "Welcome to the Algorithm run-time application\n"
     str += ".\n.\n.\n"
     str += "Please choose the Algorithm you wish to test\n"
     print(str)
@@ -183,7 +182,7 @@ def partition(A, low, high):
 
 def print_which_algorithm_user_chose(algorithm_number, input_size_of_array):
     size = str(input_size_of_array)
-    str_output = "\n\n---------------------You have chosen "
+    str_output = "\n\n#---------You have chosen "
     if algorithm_number == 1:
         str_output += "INSERTION SORT"
     if algorithm_number == 2:
@@ -194,39 +193,67 @@ def print_which_algorithm_user_chose(algorithm_number, input_size_of_array):
         str_output += "QUICK SORT"
     if algorithm_number == 5:
         str_output += "QUICK SORT (Random Pivot)"
-    str_output += "---------------------\n"
+    str_output += "---------#\n"
     str_output += ""
     str_output += "Array Size = " + size
     str_output += "\n\n"
     print(str_output)
 
+def round_to_n_significant(time):
+    n = 3
+    return round(time, n)
 
+def convert_s_to_ms(time):
+    return time * 1000
+
+def want_to_print():
+    str_input = str(input("Do you want to print the arrays? "))
+    print = False
+    if ((str_input == "Y") or (str_input == 'y') or \
+        (str_input == "Yes") or (str_input == 'yes')):
+        print = True
+    else:
+        print = False
+    return print
+
+def print_unsorted_and_sorted_arrays(unsorted, sorted):
+    print("Unsorted Random Array: ", end="")
+    print("[",end=" ")
+    for item in array:
+        print(str(item), end= " ")
+    print("]\n")
+
+    print("Sorted Array: ", end="")
+    print("[",end=" ")
+    for item in sorted_array:
+        print(str(item),end=" ")
+    print("]\n")
+
+
+
+#----------------------------------------main run function--------------------------------#
 def main_run():
     welcome()
     choose_algorithm()
     algorithm_chosen = user_input()
     n =  choose_input_size()
+    print_choice = False
+    if(n <= 100):
+        print_choice = want_to_print()
     print_which_algorithm_user_chose(algorithm_chosen, n)
-
     array = generate_random_array_of_size(n)
+    print("Sorting...\n\n")
     sorted_array, time = sort(array, algorithm_chosen)
-    time_in_millisecond = time*1000
-    #time_to_5_sf = round(time_in_millisecond, -5)
+    time_in_millisecond = convert_s_to_ms(time)
+    time_in_n_sf = round_to_n_significant(time_in_millisecond)
 
-    if n <= 100:
-        print("Random Array: ", end="")
-        print("[",end=" ")
-        for item in array:
-            print(str(item), end= " ")
-        print("]\n")
+    if(print_choice):
+        print_unsorted_and_sorted_arrays(array, sorted_array)
 
-        print("Sorted Array: ", end="")
-        print("[",end=" ")
-        for item in sorted_array:
-            print(str(item),end=" ")
-        print("]\n")
+    print("Total time taken: ", time_in_n_sf, " milliseconds")
 
-    print("Total time taken: ", time_in_millisecond, " seconds")
+
+
 
 if __name__ == '__main__':
     main_run()
