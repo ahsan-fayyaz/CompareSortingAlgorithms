@@ -1,5 +1,5 @@
 import math
-from random import randint
+import random
 import timeit
 import copy
 import sys
@@ -46,7 +46,7 @@ def generate_random_array_of_size(n):
     try:
         Array = [0] * n
         for i in range(0,n):
-            x = randint(0,n)
+            x = random.randint(0,100) #generate random numbers between 0 and 100
             Array[i] = x
         return Array
     except MemoryError:
@@ -88,6 +88,13 @@ def sort(array, algorithm):
         time = stop - start
         return array, time
 
+    elif(algorithm == 5):
+        start = timeit.default_timer()
+        quickSort_random(array, 0, n-1)
+        stop = timeit.default_timer()
+        time = stop - start
+        return array, time
+
 
 ################--------------SORTING ALGORITHMS------------------################
 
@@ -107,7 +114,6 @@ def insertionSort(array, n):
 
 
 #------------------Merge Sort------------------#
-import math
 def mergeSort(A, left, right):
     if (left < right):
         mid = math.floor((left + right) / 2)
@@ -115,8 +121,6 @@ def mergeSort(A, left, right):
         mergeSort(A, left, mid)
         mergeSort(A, mid + 1, right)
         merge(A, left, mid, right)
-
-
 
 
 def merge(A, low, mid, high):
@@ -209,7 +213,8 @@ def quickSort_random(A, low, high):
 
 def partition_random(A, low, high):
     #Generate a random index between the low & high
-    pivot = random.randrange(low, high)
+    pivot_index = random.randrange(low, high)
+    pivot = A[pivot_index]
     A[pivot_index], A[high] = A[high], A[pivot_index]
     i = low - 1
 
@@ -289,7 +294,6 @@ def print_unsorted_and_sorted_arrays(unsorted, sorted):
 def main_run():
     welcome()
     choose_algorithm()
-
     correct = True
     while(correct):
         algorithm_chosen = user_input()
@@ -302,12 +306,20 @@ def main_run():
 
     n =  choose_input_size()
     print_choice = False
+    #If size =< 100 give user option to print the array
     if(n <= 100):
         print_choice = want_to_print()
     print_which_algorithm_user_chose(algorithm_chosen, n)
     array = generate_random_array_of_size(n)
-    if(n <= 100):
+
+    #Since most of the algorithms are in place,
+    #if user has chosen to print the algorithm,
+    #we need to deepcopy the original (random) generated array
+    #so that array before and after sorting can be displayed
+
+    if(print_choice):
         temp_ptr_to_array = copy.deepcopy(array)
+
     print("Sorting...\n\n")
     sorted_array, time = sort(array, algorithm_chosen)
     time_in_millisecond = convert_s_to_ms(time)
