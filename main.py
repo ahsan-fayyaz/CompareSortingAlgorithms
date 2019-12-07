@@ -5,6 +5,8 @@ import copy
 import sys
 import os
 
+
+#------------------Function to display welcome text------------------#
 def welcome():
     str =  "    ------------------------------------\n"
     str += "    |      ALGORITHM RUN-TIME TOOL     |\n"
@@ -15,25 +17,31 @@ def welcome():
     str += "Please choose the Algorithm you wish to test\n"
     print(str)
 
+
+#------------------Function to print the algorithms available for test------------------#
 def choose_algorithm():
     str =   "1)   Insertion Sort\n"
     str +=  "2)   Merge Sort\n"
     str +=  "3)   Heap Sort\n"
     str +=  "4)   Quick Sort\n"
-    #str +=  "5)   Quick Sort (Random Pivot)\n"
+    str +=  "5)   Quick Sort (Random Pivot)\n"
     print(str)
 
-def user_input():
 
+
+#------------------Function that asks user to choose algorithm------------------#
+def user_input():
     user_input_number = int(input("Select the appropriate number: "))
     return user_input_number
 
 
+#---------------- Function to take user input for size of array------------------#
 def choose_input_size():
     n = int(input("Please choose the array size: "))
     return n
 
 
+#------------------Function to generate array of random numbers------------------#
 def generate_random_array_of_size(n):
     try:
         Array = [0] * n
@@ -49,6 +57,7 @@ def generate_random_array_of_size(n):
         sys.exit()
 
 
+#-----------------Function that calls appropriate algorithm and returns time taken------------------#
 def sort(array, algorithm):
     n = len(array)
     if (algorithm == 1):
@@ -80,7 +89,7 @@ def sort(array, algorithm):
         return array, time
 
 
-
+################--------------SORTING ALGORITHMS------------------################
 
 #------------------Insertion Sort------------------#
 def insertionSort(array, n):
@@ -191,7 +200,33 @@ def partition(A, low, high):
 
     return (i+1)
 
+#------------------Quick Sort (Random Pivot)------------------#
+def quickSort_random(A, low, high):
+    if(low < high):
+        partition_index = partition_random(A, low, high)
+        quickSort_random(A, low, partition_index-1)
+        quickSort_random(A, partition_index+1, high)
 
+def partition_random(A, low, high):
+    #Generate a random index between the low & high
+    pivot = random.randrange(low, high)
+    A[pivot_index], A[high] = A[high], A[pivot_index]
+    i = low - 1
+
+    for j in range(low, high):
+        if A[j] <= pivot:
+            i = i + 1
+            A[i], A[j] = A[j], A[i]
+
+    A[i+1], A[high] = A[high], A[i+1]
+
+    return (i+1)
+
+
+################--------HELPER FUNCTIONS---------#########
+
+
+#-----------------------Function to display results------------------#
 def print_which_algorithm_user_chose(algorithm_number, input_size_of_array):
     size = str(input_size_of_array)
     str_output =  "\n\n\n                           RESULTS"
@@ -213,13 +248,17 @@ def print_which_algorithm_user_chose(algorithm_number, input_size_of_array):
     str_output += "\n\n"
     print(str_output)
 
+#-----------------------Function to round time to n significant figures------------------#
 def round_to_n_significant(time):
     n = 3
     return round(time, n)
 
+#-----------------------Function to convert time to milliseconds------------------#
 def convert_s_to_ms(time):
     return time * 1000
 
+
+#--------------If user input is 100 or less, user has an option to print the input, output array------------------#
 def want_to_print():
     str_input = str(input("Do you want to print the arrays? "))
     print = False
@@ -230,6 +269,7 @@ def want_to_print():
         print = False
     return print
 
+#-----------------------Function to display Unsorted & Sorted Arrays------------------#
 def print_unsorted_and_sorted_arrays(unsorted, sorted):
     print("Unsorted Random Array: ", end="")
     print("[",end=" ")
@@ -245,7 +285,7 @@ def print_unsorted_and_sorted_arrays(unsorted, sorted):
 
 
 
-#----------------------------------------main run function--------------------------------#
+#----------------------------------------MAIN Function--------------------------------#
 def main_run():
     welcome()
     choose_algorithm()
