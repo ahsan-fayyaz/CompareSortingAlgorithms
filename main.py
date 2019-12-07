@@ -2,7 +2,8 @@ import math
 from random import randint
 import timeit
 import copy
-
+import sys
+import os
 
 def welcome():
     str =  "    ------------------------------------\n"
@@ -23,8 +24,10 @@ def choose_algorithm():
     print(str)
 
 def user_input():
-    user_input = int(input("Select the appropriate number: "))
-    return user_input
+
+    user_input_number = int(input("Select the appropriate number: "))
+    return user_input_number
+
 
 def choose_input_size():
     n = int(input("Please choose the array size: "))
@@ -32,11 +35,19 @@ def choose_input_size():
 
 
 def generate_random_array_of_size(n):
-    Array = [0] * n
-    for i in range(0,n):
-        x = randint(0,n)
-        Array[i] = x
-    return Array
+    try:
+        Array = [0] * n
+        for i in range(0,n):
+            x = randint(0,n)
+            Array[i] = x
+        return Array
+    except MemoryError:
+        os.system("clear")
+        print("*********MEMORY ERROR********")
+        print("The input value for Array is too big")
+        print("Safely exiting...")
+        sys.exit()
+
 
 def sort(array, algorithm):
     n = len(array)
@@ -183,7 +194,10 @@ def partition(A, low, high):
 
 def print_which_algorithm_user_chose(algorithm_number, input_size_of_array):
     size = str(input_size_of_array)
-    str_output = "\n\n#---------You have chosen "
+    str_output =  "\n\n\n                           RESULTS"
+    str_output += "\n__________________________________________________________________\n\n"
+    str_output += "Algorithm :   "
+    #str_output += "\n\n\n"
     if algorithm_number == 1:
         str_output += "INSERTION SORT"
     if algorithm_number == 2:
@@ -194,9 +208,8 @@ def print_which_algorithm_user_chose(algorithm_number, input_size_of_array):
         str_output += "QUICK SORT"
     if algorithm_number == 5:
         str_output += "QUICK SORT (Random Pivot)"
-    str_output += "---------#\n"
-    str_output += ""
-    str_output += "Array Size = " + size
+    str_output += "\n"
+    str_output += "Array Size:   " + size
     str_output += "\n\n"
     print(str_output)
 
@@ -234,16 +247,27 @@ def print_unsorted_and_sorted_arrays(unsorted, sorted):
 
 #----------------------------------------main run function--------------------------------#
 def main_run():
-    welcome()    
+    welcome()
     choose_algorithm()
-    algorithm_chosen = user_input()
+
+    correct = True
+    while(correct):
+        algorithm_chosen = user_input()
+        if (algorithm_chosen < 1 or algorithm_chosen > 5):
+            print("\n~~~~~~ INVALID INPUT ~~~~~~")
+            print("         Try Again\n")
+            correct = True
+        else:
+            correct = False
+
     n =  choose_input_size()
     print_choice = False
     if(n <= 100):
         print_choice = want_to_print()
     print_which_algorithm_user_chose(algorithm_chosen, n)
     array = generate_random_array_of_size(n)
-    temp_ptr_to_array = copy.deepcopy(array)
+    if(n <= 100):
+        temp_ptr_to_array = copy.deepcopy(array)
     print("Sorting...\n\n")
     sorted_array, time = sort(array, algorithm_chosen)
     time_in_millisecond = convert_s_to_ms(time)
@@ -252,7 +276,7 @@ def main_run():
     if(print_choice):
         print_unsorted_and_sorted_arrays(temp_ptr_to_array, sorted_array)
 
-    print("Total time taken: ", time_in_n_sf, " milliseconds")
+    print("\nTime taken to Sort: ", time_in_n_sf, " milliseconds")
 
 
 
