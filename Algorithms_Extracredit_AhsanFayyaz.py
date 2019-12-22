@@ -4,7 +4,7 @@ import timeit
 import copy
 import sys
 import os
-
+sys.setrecursionlimit(100000)
 
 #------------------Function to display welcome text------------------#
 def welcome():
@@ -312,7 +312,7 @@ def main_run():
     print_which_algorithm_user_chose(algorithm_chosen, n)
     array = generate_random_array_of_size(n)
 
-    #Since most of the algorithms are in place,
+    #Since most of the algorithms are in-place,
     #if user has chosen to print the algorithm,
     #we need to deepcopy the original (random) generated array
     #so that array before and after sorting can be displayed
@@ -332,6 +332,6 @@ def main_run():
 
 
 
-
+#------------------------------MAIN-------------------------#
 if __name__ == '__main__':
     main_run()
